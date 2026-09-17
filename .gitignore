@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Environment
+.env
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+
+# Logs
+*.log
+
+dist-ssr
+*.local
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
