@@ -1,59 +1,38 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  imageUrl: string | null;
-  stock: number;
-};
+import { Link, Route, Routes } from "react-router";
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
+import CartPage from "./pages/CartPage";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get<Product[]>(
-          "http://localhost:5000/api/products"
-        );
-
-        setProducts(response.data);
-      } catch {
-        setError("Failed to load products");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) {
-    return <p>Loading products...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
-    <main>
-      <h1>MyShop</h1>
+    <div className="min-h-screen bg-gray-50">
+      <header className="border-b bg-white">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link to="/" className="text-2xl font-bold">
+            MyShop
+          </Link>
 
-      {products.map((product) => (
-        <div key={product.id}>
-          <h2>{product.name}</h2>
-          <p>{product.description}</p>
-          <p>{product.price} MAD</p>
-          <p>Stock: {product.stock}</p>
-        </div>
-      ))}
-    </main>
+          <div className="flex gap-6">
+            <Link to="/">Home</Link>
+            <Link to="/products">Products</Link>
+            <Link to="/cart">Cart</Link>
+          </div>
+        </nav>
+      </header>
+
+      <main className="mx-auto max-w-6xl px-6 py-8">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route
+            path="/products/:id"
+            element={<ProductDetailsPage />}
+          />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
