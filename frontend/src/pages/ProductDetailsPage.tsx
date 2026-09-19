@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import api from "../lib/api";
 import type { Product } from "../types/product";
+import { useCartStore } from "../store/cartStore";
 
 function ProductDetailsPage() {
   const { id } = useParams();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -81,11 +83,12 @@ function ProductDetailsPage() {
         </p>
 
         <button
-          type="button"
-          className="mt-6 rounded-md bg-black px-6 py-3 text-white hover:bg-gray-800"
-        >
-          Add to Cart
-        </button>
+         type="button"
+         onClick={() => addToCart(product)}
+         className="mt-6 rounded-md bg-black px-6 py-3 text-white hover:bg-gray-800"
+      >
+         Add to Cart
+       </button>
       </div>
     </section>
   );
