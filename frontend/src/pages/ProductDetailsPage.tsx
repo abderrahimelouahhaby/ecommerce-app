@@ -82,13 +82,23 @@ function ProductDetailsPage() {
           {product.stock}
         </p>
 
-        <button
-         type="button"
-         onClick={() => addToCart(product)}
-         className="mt-6 rounded-md bg-black px-6 py-3 text-white hover:bg-gray-800"
-      >
-         Add to Cart
-       </button>
+        {product.stock > 0 ? (
+  <button
+    type="button"
+    onClick={() => addToCart(product)}
+    className="mt-6 rounded-md bg-black px-6 py-3 text-white hover:bg-gray-800"
+  >
+    Add to Cart
+  </button>
+) : (
+  <button
+    type="button"
+    disabled
+    className="mt-6 cursor-not-allowed rounded-md bg-gray-300 px-6 py-3 text-gray-600"
+  >
+    Out of Stock
+  </button>
+)}
       </div>
     </section>
   );

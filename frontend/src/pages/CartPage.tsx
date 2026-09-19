@@ -97,13 +97,14 @@ const totalPrice = useCartStore(
 
                 <button
                   type="button"
+                  disabled={item.quantity >= item.stock}
                   onClick={() =>
                     updateQuantity(
                       item.productId,
                       item.quantity + 1
                     )
                   }
-                  className="rounded border px-3 py-1"
+                  className="rounded border px-3 py-1 disabled:opacity-40"
                 >
                   +
                 </button>

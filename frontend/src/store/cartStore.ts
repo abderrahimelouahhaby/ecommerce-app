@@ -30,6 +30,10 @@ export const useCartStore = create<CartStore>()(
           );
 
           if (existingItem) {
+            if (existingItem.quantity >= product.stock) {
+              return state;
+            }
+
             return {
               items: state.items.map((item) =>
                 item.productId === product.id
@@ -42,6 +46,10 @@ export const useCartStore = create<CartStore>()(
             };
           }
 
+          if (product.stock <= 0) {
+            return state;
+          }
+
           return {
             items: [
               ...state.items,
@@ -50,6 +58,7 @@ export const useCartStore = create<CartStore>()(
                 name: product.name,
                 price: product.price,
                 imageUrl: product.imageUrl,
+                stock: product.stock,
                 quantity: 1,
               },
             ],
@@ -66,7 +75,15 @@ export const useCartStore = create<CartStore>()(
       },
 
       updateQuantity: (productId, quantity) => {
-        if (quantity <= 0) {
+        const item = get().items.find(
+          (item) => item.productId === productId
+        );
+
+        const nextQuantity = item
+          ? Math.min(quantity, item.stock)
+          : quantity;
+
+        if (nextQuantity <= 0) {
           get().removeFromCart(productId);
           return;
         }
@@ -74,7 +91,7 @@ export const useCartStore = create<CartStore>()(
         set((state) => ({
           items: state.items.map((item) =>
             item.productId === productId
-              ? { ...item, quantity }
+              ? { ...item, quantity: nextQuantity }
               : item
           ),
         }));
@@ -100,7 +117,7 @@ export const useCartStore = create<CartStore>()(
       },
     }),
     {
-      name: "myshop-cart",
+      name: "myshop-cart-v2",
     }
   )
 );
