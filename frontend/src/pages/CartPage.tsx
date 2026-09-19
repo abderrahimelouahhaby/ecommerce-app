@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useCartStore } from "../store/cartStore";
+import { formatPrice } from "../lib/formatPrice";
 
 function CartPage() {
 const items = useCartStore((state) => state.items);
@@ -76,8 +77,8 @@ const totalPrice = useCartStore(
               </h2>
 
               <p className="text-gray-600">
-                {item.price} MAD
-              </p>
+  {formatPrice(item.price)}
+</p>
 
               <div className="mt-3 flex items-center gap-3">
                 <button
@@ -131,7 +132,7 @@ const totalPrice = useCartStore(
 
         <p className="mt-2 text-xl">
           Total:{" "}
-          <strong>{totalPrice.toFixed(2)} MAD</strong>
+          <strong>{formatPrice(totalPrice.toString())}</strong>
         </p>
 
         <button

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import api from "../lib/api";
 import type { Product } from "../types/product";
 import { useCartStore } from "../store/cartStore";
+import { formatPrice } from "../lib/formatPrice";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -70,8 +71,8 @@ function ProductDetailsPage() {
         </h1>
 
         <p className="mt-4 text-2xl font-semibold">
-          {product.price} MAD
-        </p>
+  {formatPrice(product.price)}
+</p>
 
         <p className="mt-6 text-gray-600">
           {product.description}

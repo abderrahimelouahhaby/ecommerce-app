@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { Product } from "../types/product";
-
+import { formatPrice } from "../lib/formatPrice";
 type ProductCardProps = {
   product: Product;
 };
@@ -27,9 +27,8 @@ function ProductCard({ product }: ProductCardProps) {
 
         <div className="mt-4 flex items-center justify-between">
           <span className="font-bold">
-            {product.price} MAD
+            {formatPrice(product.price)}
           </span>
-
           <Link
             to={`/products/${product.id}`}
             className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
