@@ -15,19 +15,11 @@ export function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const authorization = req.headers.authorization;
+    const token = req.cookies?.token;
 
-    if (!authorization) {
+    if (!token) {
       return res.status(401).json({
         message: "Authentication required",
-      });
-    }
-
-    const [type, token] = authorization.split(" ");
-
-    if (type !== "Bearer" || !token) {
-      return res.status(401).json({
-        message: "Invalid authorization header",
       });
     }
 
