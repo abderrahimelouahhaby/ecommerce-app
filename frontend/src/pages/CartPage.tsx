@@ -46,7 +46,7 @@ function CartPage() {
 
       alert("Order created successfully!");
 
-      navigate("/products");
+      navigate("/orders");
     } catch (error) {
       console.error(error);
 

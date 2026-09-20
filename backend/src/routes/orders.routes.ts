@@ -11,7 +11,53 @@ const router = Router();
 
 class OrderError extends Error {}
 
+//get orders
 
+router.get(
+  "/",
+  authMiddleware,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (!req.userId) {
+        return res.status(401).json({
+          message: "Authentication required",
+        });
+      }
+
+      const orders = await prisma.order.findMany({
+        where: {
+          userId: req.userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          items: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return res.json(orders);
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        message: "Failed to fetch orders",
+      });
+    }
+  }
+);
+
+// post orders
 
 router.post(
   "/",
