@@ -1,5 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 import api from "../lib/api";
 import {
   useAuthStore,
@@ -19,15 +20,21 @@ function LoginPage() {
     setError("");
 
     try {
-      const response = await api.post<{ user: User }>(
+      const response = await api.post<{ data: User }>(
         "/auth/login",
         { email, password }
       );
 
-      login(response.data.user);
+      login(response.data.data);
       navigate("/");
-    } catch {
-      setError("Invalid email or password.");
+    } catch (err) {
+      setError(
+        axios.isAxiosError(err)
+          ? (err.response?.data as {
+              error?: { message?: string };
+            })?.error?.message ?? "Invalid email or password."
+          : "Invalid email or password."
+      );
     }
   };
 

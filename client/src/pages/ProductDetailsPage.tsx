@@ -16,11 +16,11 @@ function ProductDetailsPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await api.get<Product>(
+        const response = await api.get<{ data: Product }>(
           `/products/${id}`
         );
 
-        setProduct(response.data);
+        setProduct(response.data.data);
       } catch (error) {
         console.error(error);
         setError("Product not found.");

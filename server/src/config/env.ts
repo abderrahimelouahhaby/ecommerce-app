@@ -12,7 +12,8 @@ const envSchema = z.object({
   CLIENT_URL: z.string().url().default("http://localhost:5173"),
   ALLOW_REGISTRATION: z
     .enum(["true", "false"])
-    .default("true"),
+    .default("true")
+    .transform((value) => value === "true"),
   SEED_ADMIN_EMAIL: z.string().email().optional(),
   SEED_ADMIN_PASSWORD: z.string().min(8).optional(),
 });

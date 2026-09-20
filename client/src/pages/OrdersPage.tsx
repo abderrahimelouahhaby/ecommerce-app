@@ -13,9 +13,9 @@ function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await api.get<Order[]>("/orders");
+        const response = await api.get<{ data: Order[] }>("/orders");
 
-        setOrders(response.data);
+        setOrders(response.data.data);
       } catch (error) {
         console.error(error);
 

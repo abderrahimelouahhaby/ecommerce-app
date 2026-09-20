@@ -19,9 +19,9 @@ function App() {
 
   useEffect(() => {
     api
-      .get<User>("/users/me")
+      .get<{ data: User }>("/auth/me")
       .then((response) => {
-        login(response.data);
+        login(response.data.data);
       })
       .catch(() => {
         // Not logged in; ignore.

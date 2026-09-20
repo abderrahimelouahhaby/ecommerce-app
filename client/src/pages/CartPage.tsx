@@ -51,8 +51,9 @@ function CartPage() {
       console.error(error);
 
       const message = axios.isAxiosError(error)
-        ? (error.response?.data as { message?: string })
-            ?.message
+        ? (error.response?.data as {
+            error?: { message?: string };
+          })?.error?.message
         : "Failed to create order.";
 
       alert(message ?? "Failed to create order.");

@@ -11,9 +11,9 @@ function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get<Product[]>("/products");
+        const response = await api.get<{ data: Product[] }>("/products");
 
-        setProducts(response.data);
+        setProducts(response.data.data);
       } catch (error) {
         console.error(error);
         setError("Failed to load products.");

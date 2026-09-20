@@ -1,5 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 import api from "../lib/api";
 import {
   useAuthStore,
@@ -21,7 +22,7 @@ function RegisterPage() {
     setError("");
 
     try {
-      const response = await api.post<{ user: User }>(
+      const response = await api.post<{ data: User }>(
         "/auth/register",
         {
           firstName,
@@ -31,33 +32,30 @@ function RegisterPage() {
         }
       );
 
-      login(response.data.user);
+      login(response.data.data);
       navigate("/");
     } catch (err) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof err.response === "object" &&
-        err.response !== null &&
-        "data" in err.response
-      ) {
-        const data = err.response.data as {
-          errors?: Record<
-            string,
-            string[] | undefined
-          >;
-        };
+      if (axios.isAxiosError(err)) {
+        const errorBody = err.response?.data as
+          | {
+              error?: {
+                message?: string;
+                details?: { message?: string }[];
+              };
+            }
+          | undefined;
 
-        if (data.errors) {
-          const messages = Object.values(data.errors)
-            .flat()
-            .filter(Boolean)
-            .join(", ");
+        const details = errorBody?.error?.details
+          ?.map((detail) => detail.message)
+          .filter(Boolean)
+          .join(", ");
 
-          setError(messages || "Invalid input.");
-          return;
-        }
+        setError(
+          details ||
+            errorBody?.error?.message ||
+            "Registration failed. Please try again."
+        );
+        return;
       }
 
       setError("Registration failed. Please try again.");

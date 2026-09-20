@@ -1,6 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 
-export const createOrderSchema = z.object({
+export const createOrderBody = z.object({
   items: z
     .array(
       z.object({
@@ -9,4 +9,8 @@ export const createOrderSchema = z.object({
       })
     )
     .min(1, "Order must contain at least one item"),
+});
+
+export const orderIdParams = z.object({
+  id: z.string().uuid(),
 });
