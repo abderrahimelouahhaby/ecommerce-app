@@ -1,31 +1,8 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import productsRouter from "./routes/products.routes.js";
-import authRouter from "./routes/auth.routes.js";
-import usersRouter from "./routes/users.routes.js";
-import cookieParser from "cookie-parser";
-import ordersRouter from "./routes/orders.routes.js";
+import { createApp } from "./app.js";
+import { env } from "./config/env.js";
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const app = createApp();
 
-app.use(helmet());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
-app.use(express.json());
-app.use(cookieParser());
-
-app.use("/api/products", productsRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/orders", ordersRouter);
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`Server running on port ${env.PORT}`);
 });
