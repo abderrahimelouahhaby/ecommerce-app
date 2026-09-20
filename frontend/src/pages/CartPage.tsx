@@ -1,24 +1,63 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import axios from "axios";
 import { useCartStore } from "../store/cartStore";
 import { formatPrice } from "../lib/formatPrice";
+import api from "../lib/api";
+import { useAuthStore } from "../store/authStore";
 
 function CartPage() {
-const items = useCartStore((state) => state.items);
-const removeFromCart = useCartStore(
-  (state) => state.removeFromCart
-);
-const updateQuantity = useCartStore(
-  (state) => state.updateQuantity
-);
-const clearCart = useCartStore(
-  (state) => state.clearCart
-);
-const totalItems = useCartStore(
-  (state) => state.totalItems()
-);
-const totalPrice = useCartStore(
-  (state) => state.totalPrice()
-);
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+
+  const items = useCartStore((state) => state.items);
+  const removeFromCart = useCartStore(
+    (state) => state.removeFromCart
+  );
+  const updateQuantity = useCartStore(
+    (state) => state.updateQuantity
+  );
+  const clearCart = useCartStore(
+    (state) => state.clearCart
+  );
+  const totalItems = useCartStore(
+    (state) => state.totalItems()
+  );
+  const totalPrice = useCartStore(
+    (state) => state.totalPrice()
+  );
+
+  const handleCheckout = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await api.post("/orders", {
+        items: items.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      });
+
+      console.log("Order created:", response.data);
+
+      clearCart();
+
+      alert("Order created successfully!");
+
+      navigate("/products");
+    } catch (error) {
+      console.error(error);
+
+      const message = axios.isAxiosError(error)
+        ? (error.response?.data as { message?: string })
+            ?.message
+        : "Failed to create order.";
+
+      alert(message ?? "Failed to create order.");
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -77,8 +116,8 @@ const totalPrice = useCartStore(
               </h2>
 
               <p className="text-gray-600">
-  {formatPrice(item.price)}
-</p>
+                {formatPrice(item.price)}
+              </p>
 
               <div className="mt-3 flex items-center gap-3">
                 <button
@@ -137,6 +176,7 @@ const totalPrice = useCartStore(
 
         <button
           type="button"
+          onClick={handleCheckout}
           className="mt-6 rounded-md bg-black px-6 py-3 text-white"
         >
           Checkout
