@@ -4,11 +4,6 @@ import { prisma } from "../../lib/prisma.js";
 import { env } from "../../config/env.js";
 import { AppError } from "../../utils/AppError.js";
 
-/**
- * Compared against when the email does not exist, so a failed
- * login takes the same time as a real one (no user enumeration
- * via response timing).
- */
 const DUMMY_PASSWORD_HASH = bcrypt.hashSync(
   "dummy-password-for-equal-timing",
   12

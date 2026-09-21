@@ -4,7 +4,7 @@ export const createOrderBody = z.object({
   items: z
     .array(
       z.object({
-        productId: z.string().uuid(),
+        productId: z.uuid(),
         quantity: z.number().int().positive(),
       })
     )
@@ -12,5 +12,5 @@ export const createOrderBody = z.object({
 });
 
 export const orderIdParams = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
 });

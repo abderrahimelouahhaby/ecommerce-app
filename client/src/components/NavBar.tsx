@@ -37,8 +37,8 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-4">
                  <Link to="/orders">
-      My Orders
-    </Link>
+                    My Orders
+                 </Link>
               <span>
                 {user.firstName} {user.lastName}
               </span>

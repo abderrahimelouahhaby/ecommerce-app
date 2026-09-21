@@ -9,12 +9,12 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default("1d"),
-  CLIENT_URL: z.string().url().default("http://localhost:5173"),
+  CLIENT_URL: z.url().default("http://localhost:5173"),
   ALLOW_REGISTRATION: z
     .enum(["true", "false"])
     .default("true")
     .transform((value) => value === "true"),
-  SEED_ADMIN_EMAIL: z.string().email().optional(),
+  SEED_ADMIN_EMAIL: z.email().optional(),
   SEED_ADMIN_PASSWORD: z.string().min(8).optional(),
 });
 

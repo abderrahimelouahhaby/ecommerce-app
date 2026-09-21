@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-
 import api from "../lib/api";
 import { formatPrice } from "../lib/formatPrice";
 import type { Order } from "../types/order";
