@@ -5,6 +5,7 @@ import { canAccessOrder, type AuthUser } from "../../lib/permissions.js";
 
 export type CreateOrderInput = {
   items: { productId: string; quantity: number }[];
+  shipping: { fullName: string; phone: string; address: string; city: string };
 };
 
 const orderInclude = {
@@ -98,6 +99,7 @@ export async function create(userId: string, body: CreateOrderInput) {
       data: {
         userId,
         total,
+        ...body.shipping,
         items: { create: orderItems },
       },
       include: orderInclude,
