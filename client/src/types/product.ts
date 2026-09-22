@@ -5,6 +5,7 @@ export type Product = {
   price: string;
   imageUrl: string | null;
   stock: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 };

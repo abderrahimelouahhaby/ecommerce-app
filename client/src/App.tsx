@@ -10,6 +10,10 @@ import Navbar from "./components/NavBar";
 import api from "./lib/api";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import AdminRoute from "./components/AdminRoute";
+import AdminLayout from "./components/AdminLayout";
+import AdminProductListPage from "./pages/AdminProductListPage";
+import AdminProductFormPage from "./pages/AdminProductFormPage";
 import {
   useAuthStore,
   type User,
@@ -45,6 +49,13 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/admin" element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="products" element={<AdminProductListPage />} />
+            <Route path="products/new" element={<AdminProductFormPage />} />
+            <Route path="products/:id/edit" element={<AdminProductFormPage />} />
+          </Route>
+        </Route>
         </Routes>
       </main>
     </div>

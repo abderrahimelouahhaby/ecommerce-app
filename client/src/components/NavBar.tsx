@@ -39,6 +39,9 @@ export default function Navbar() {
                  <Link to="/orders">
                     My Orders
                  </Link>
+                 {user.role === "ADMIN" && (
+                    <Link to="/admin/products">Admin</Link>
+                  )}
               <span>
                 {user.firstName} {user.lastName}
               </span>
