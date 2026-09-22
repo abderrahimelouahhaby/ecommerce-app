@@ -18,6 +18,12 @@ router.get(
 );
 
 router.post(
+  "/:id/cancel",
+  validate({ params: orderIdParams }),
+  ordersController.cancel
+);
+
+router.post(
   "/",
   validate({ body: createOrderBody }),
   ordersController.create

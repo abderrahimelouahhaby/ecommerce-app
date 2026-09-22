@@ -82,6 +82,12 @@ function OrdersPage() {
                       order.createdAt
                     ).toLocaleDateString()}
                   </p>
+                  <Link
+                      to={`/orders/${order.id}`}
+                      className="mt-2 inline-block text-sm text-black underline"
+                    >
+                      View order
+                    </Link>
                 </div>
 
                 <div>
