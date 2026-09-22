@@ -41,6 +41,47 @@ export async function getById(user: AuthUser, orderId: string) {
 }
 
 /**
+ * Cancels a PENDING order: restores product stock and marks it CANCELLED,
+ * all inside one transaction so nothing is left half-done.
+ */
+export async function cancel(user: AuthUser, orderId: string) {
+  return prisma.$transaction(async (tx) => {
+    const order = await tx.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
+
+    // Same ownership rule as getById: foreign orders look like 404s.
+    if (!order || !canAccessOrder(user, order)) {
+      throw new AppError(404, "NOT_FOUND", "Order not found.");
+    }
+
+    // Only a fresh, unpaid order can be cancelled.
+    if (order.status !== "PENDING") {
+      throw new AppError(
+        409,
+        "ORDER_NOT_CANCELLABLE",
+        "Only pending orders can be cancelled."
+      );
+    }
+
+    // Give every product its stock back, item by item.
+    for (const item of order.items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { increment: item.quantity } },
+      });
+    }
+
+    return tx.order.update({
+      where: { id: orderId },
+      data: { status: "CANCELLED" },
+      include: orderInclude,
+    });
+  });
+}
+
+/**
  * Creates the order in a single DB transaction: it checks stock,
  * reserves it, and writes the order + lines — all or nothing.
  */

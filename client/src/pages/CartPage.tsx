@@ -36,7 +36,7 @@ function CartPage() {
     setSubmitting(true);
 
     try {
-      await api.post("/orders", {
+      const response = await api.post<{ data: { id: string } }>("/orders", {
         items: items.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
@@ -45,7 +45,7 @@ function CartPage() {
       });
 
       clearCart();
-      navigate("/orders");
+      navigate(`/orders/${response.data.data.id}`);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const errorBody = err.response?.data as

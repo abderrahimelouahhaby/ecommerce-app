@@ -12,6 +12,12 @@ export async function getById(req: Request, res: Response) {
   res.json({ data: order });
 }
 
+export async function cancel(req: Request, res: Response) {
+  const { id } = req.validated?.params as { id: string };
+  const order = await ordersService.cancel(req.user!, id);
+  res.json({ data: order });
+}
+
 export async function create(req: Request, res: Response) {
   const body = req.validated?.body as Parameters<
     typeof ordersService.create

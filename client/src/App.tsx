@@ -9,6 +9,7 @@ import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/NavBar";
 import api from "./lib/api";
 import OrdersPage from "./pages/OrdersPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
 import {
   useAuthStore,
   type User,
@@ -43,6 +44,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetailPage />} />
         </Routes>
       </main>
     </div>
