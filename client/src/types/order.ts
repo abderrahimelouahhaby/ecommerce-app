@@ -15,6 +15,10 @@ export type Order = {
   userId: string;
   status: string;
   total: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  city: string;
   createdAt: string;
   updatedAt: string;
   items: OrderItem[];
