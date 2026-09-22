@@ -28,9 +28,7 @@ export async function listAdmin(query: AdminListQuery) {
   const { skip, take } = paginate(query.page, query.limit);
 
   const where: Prisma.ProductWhereInput = {
-    ...(query.isActive
-      ? { isActive: query.isActive === "true" }
-      : {}),
+    ...(query.isActive ? { isActive: query.isActive === "true" } : {}),
     ...(query.search
       ? { name: { contains: query.search, mode: "insensitive" } }
       : {}),
@@ -108,7 +106,7 @@ export async function remove(id: string) {
     throw new AppError(
       409,
       "PRODUCT_HAS_ORDERS",
-      "This product has orders and cannot be deleted."
+      "This product has orders and cannot be deleted.",
     );
   }
 

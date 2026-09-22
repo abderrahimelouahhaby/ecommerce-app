@@ -18,25 +18,25 @@ router.use(authenticate, authorize("ADMIN"));
 router.get(
   "/",
   validate({ query: adminListQuery }),
-  adminProductsController.list
+  adminProductsController.list,
 );
 
 router.post(
   "/",
   validate({ body: productCreateBody }),
-  adminProductsController.create
+  adminProductsController.create,
 );
 
 router.patch(
   "/:id",
   validate({ params: productIdParams, body: productUpdateBody }),
-  adminProductsController.update
+  adminProductsController.update,
 );
 
 router.delete(
   "/:id",
   validate({ params: productIdParams }),
-  adminProductsController.remove
+  adminProductsController.remove,
 );
 
 export default router;

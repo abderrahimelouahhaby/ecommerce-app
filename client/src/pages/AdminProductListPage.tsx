@@ -14,7 +14,12 @@ type ListResponse = {
 
 function AdminProductListPage() {
   const [items, setItems] = useState<Product[]>([]);
-  const [meta, setMeta] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
+  const [meta, setMeta] = useState({
+    page: 1,
+    limit: 12,
+    total: 0,
+    totalPages: 1,
+  });
 
   const [search, setSearch] = useState("");
   const [isActive, setIsActive] = useState("");
@@ -49,8 +54,9 @@ function AdminProductListPage() {
         if (ignore) return;
 
         if (axios.isAxiosError(err)) {
-          const message = (err.response?.data as { error?: { message?: string } })
-            ?.error?.message;
+          const message = (
+            err.response?.data as { error?: { message?: string } }
+          )?.error?.message;
           setError(message ?? "Failed to load products.");
         } else {
           setError("Failed to load products.");
@@ -67,7 +73,10 @@ function AdminProductListPage() {
     };
   }, [search, isActive, page, refreshKey]);
 
-  const handleAction = async (action: "toggle" | "delete", product: Product) => {
+  const handleAction = async (
+    action: "toggle" | "delete",
+    product: Product,
+  ) => {
     if (
       action === "delete" &&
       !window.confirm(`Delete "${product.name}" permanently?`)
@@ -86,7 +95,7 @@ function AdminProductListPage() {
         setNotice(
           product.isActive
             ? "Product hidden from the storefront."
-            : "Product is now visible."
+            : "Product is now visible.",
         );
       } else {
         await api.delete(`/admin/products/${product.id}`);

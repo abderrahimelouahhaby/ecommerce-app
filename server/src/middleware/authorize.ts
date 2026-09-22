@@ -13,7 +13,7 @@ export function authorize(...roles: Role[]) {
       throw new AppError(
         403,
         "FORBIDDEN",
-        "You do not have permission to do this."
+        "You do not have permission to do this.",
       );
     }
 

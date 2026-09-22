@@ -7,7 +7,7 @@ export function errorHandler(
   error: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ) {
   if (error instanceof AppError) {
     const body: {
@@ -45,9 +45,7 @@ export function errorHandler(
     });
   }
 
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError
-  ) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2002") {
       return res.status(409).json({
         error: {

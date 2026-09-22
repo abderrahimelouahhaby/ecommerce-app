@@ -56,9 +56,7 @@ function OrderDetailPage() {
 
   const handleCancel = async () => {
     if (
-      !window.confirm(
-        "Cancel this order? The items will be returned to stock."
-      )
+      !window.confirm("Cancel this order? The items will be returned to stock.")
     ) {
       return;
     }
@@ -67,16 +65,13 @@ function OrderDetailPage() {
     setNotice("");
 
     try {
-      const response = await api.post<{ data: Order }>(
-        `/orders/${id}/cancel`
-      );
+      const response = await api.post<{ data: Order }>(`/orders/${id}/cancel`);
       setOrder(response.data.data);
       setNotice("Order cancelled. Stock has been restored.");
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        const message = (
-          err.response?.data as { error?: { message?: string } }
-        )?.error?.message;
+        const message = (err.response?.data as { error?: { message?: string } })
+          ?.error?.message;
         setNotice(message ?? "Could not cancel the order.");
       }
     } finally {
@@ -162,9 +157,7 @@ function OrderDetailPage() {
                 </div>
 
                 <p className="font-medium">
-                  {formatPrice(
-                    (Number(item.price) * item.quantity).toString()
-                  )}
+                  {formatPrice((Number(item.price) * item.quantity).toString())}
                 </p>
               </div>
             ))}

@@ -27,9 +27,7 @@ function AdminProductFormPage() {
 
     const loadProduct = async () => {
       try {
-        const response = await api.get<{ data: Product }>(
-          `/products/${id}`
-        );
+        const response = await api.get<{ data: Product }>(`/products/${id}`);
 
         if (ignore) return;
 
@@ -98,7 +96,7 @@ function AdminProductFormPage() {
           .join(", ");
 
         setError(
-          details || errorBody?.error?.message || "Could not save the product."
+          details || errorBody?.error?.message || "Could not save the product.",
         );
       } else {
         setError("Could not save the product.");

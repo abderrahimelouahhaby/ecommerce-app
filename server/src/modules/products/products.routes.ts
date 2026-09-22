@@ -10,7 +10,7 @@ router.get("/", productsController.list);
 router.get(
   "/:id",
   validate({ params: productIdParams }),
-  productsController.getById
+  productsController.getById,
 );
 
 export default router;

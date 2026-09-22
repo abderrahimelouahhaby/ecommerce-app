@@ -6,7 +6,7 @@ import { AppError } from "../../utils/AppError.js";
 
 const DUMMY_PASSWORD_HASH = bcrypt.hashSync(
   "dummy-password-for-equal-timing",
-  12
+  12,
 );
 
 export type RegisterInput = {
@@ -41,7 +41,7 @@ export async function register(input: RegisterInput) {
     throw new AppError(
       403,
       "REGISTRATION_DISABLED",
-      "Registration is currently closed."
+      "Registration is currently closed.",
     );
   }
 
@@ -53,7 +53,7 @@ export async function register(input: RegisterInput) {
     throw new AppError(
       409,
       "EMAIL_ALREADY_EXISTS",
-      "This email is already registered."
+      "This email is already registered.",
     );
   }
 
@@ -89,11 +89,15 @@ export async function login(input: LoginInput) {
 
   const passwordMatches = await bcrypt.compare(
     input.password,
-    user ? user.passwordHash : DUMMY_PASSWORD_HASH
+    user ? user.passwordHash : DUMMY_PASSWORD_HASH,
   );
 
   if (!user || !passwordMatches) {
-    throw new AppError(401, "INVALID_CREDENTIALS", "Invalid email or password.");
+    throw new AppError(
+      401,
+      "INVALID_CREDENTIALS",
+      "Invalid email or password.",
+    );
   }
 
   // Only revealed after the password is correct (don't leak account state).
@@ -101,7 +105,7 @@ export async function login(input: LoginInput) {
     throw new AppError(
       403,
       "ACCOUNT_DEACTIVATED",
-      "This account has been deactivated."
+      "This account has been deactivated.",
     );
   }
 

@@ -36,12 +36,8 @@ export default function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-4">
-                 <Link to="/orders">
-                    My Orders
-                 </Link>
-                 {user.role === "ADMIN" && (
-                    <Link to="/admin/products">Admin</Link>
-                  )}
+              <Link to="/orders">My Orders</Link>
+              {user.role === "ADMIN" && <Link to="/admin/products">Admin</Link>}
               <span>
                 {user.firstName} {user.lastName}
               </span>

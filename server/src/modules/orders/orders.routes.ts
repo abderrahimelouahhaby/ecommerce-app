@@ -14,19 +14,15 @@ router.get("/", ordersController.listMine);
 router.get(
   "/:id",
   validate({ params: orderIdParams }),
-  ordersController.getById
+  ordersController.getById,
 );
 
 router.post(
   "/:id/cancel",
   validate({ params: orderIdParams }),
-  ordersController.cancel
+  ordersController.cancel,
 );
 
-router.post(
-  "/",
-  validate({ body: createOrderBody }),
-  ordersController.create
-);
+router.post("/", validate({ body: createOrderBody }), ordersController.create);
 
 export default router;

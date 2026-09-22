@@ -14,10 +14,7 @@ import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
 import AdminProductListPage from "./pages/AdminProductListPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
-import {
-  useAuthStore,
-  type User,
-} from "./store/authStore";
+import { useAuthStore, type User } from "./store/authStore";
 
 function App() {
   const login = useAuthStore((state) => state.login);
@@ -40,22 +37,22 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
-          <Route
-            path="/products/:id"
-            element={<ProductDetailsPage />}
-          />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/admin" element={<AdminRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route path="products" element={<AdminProductListPage />} />
-            <Route path="products/new" element={<AdminProductFormPage />} />
-            <Route path="products/:id/edit" element={<AdminProductFormPage />} />
+            <Route element={<AdminLayout />}>
+              <Route path="products" element={<AdminProductListPage />} />
+              <Route path="products/new" element={<AdminProductFormPage />} />
+              <Route
+                path="products/:id/edit"
+                element={<AdminProductFormPage />}
+              />
+            </Route>
           </Route>
-        </Route>
         </Routes>
       </main>
     </div>

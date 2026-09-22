@@ -25,8 +25,6 @@ export const productCreateBody = z.object({
   stock: z.number().int().nonnegative().optional(),
 });
 
-export const productUpdateBody = productCreateBody
-  .partial()
-  .extend({
-    isActive: z.boolean().optional(),
-  });
+export const productUpdateBody = productCreateBody.partial().extend({
+  isActive: z.boolean().optional(),
+});

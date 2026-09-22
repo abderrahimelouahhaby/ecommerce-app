@@ -2,10 +2,7 @@ import { useState, type SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import api from "../lib/api";
-import {
-  useAuthStore,
-  type User,
-} from "../store/authStore";
+import { useAuthStore, type User } from "../store/authStore";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -20,20 +17,22 @@ function LoginPage() {
     setError("");
 
     try {
-      const response = await api.post<{ data: User }>(
-        "/auth/login",
-        { email, password }
-      );
+      const response = await api.post<{ data: User }>("/auth/login", {
+        email,
+        password,
+      });
 
       login(response.data.data);
       navigate("/");
     } catch (err) {
       setError(
         axios.isAxiosError(err)
-          ? (err.response?.data as {
-              error?: { message?: string };
-            })?.error?.message ?? "Invalid email or password."
-          : "Invalid email or password."
+          ? ((
+              err.response?.data as {
+                error?: { message?: string };
+              }
+            )?.error?.message ?? "Invalid email or password.")
+          : "Invalid email or password.",
       );
     }
   };
@@ -51,46 +50,34 @@ function LoginPage() {
         className="mt-8 space-y-4 rounded-lg border bg-white p-6"
       >
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="email" className="block text-sm font-medium">
             Email
           </label>
           <input
             id="email"
             type="email"
             value={email}
-            onChange={(event) =>
-              setEmail(event.target.value)
-            }
+            onChange={(event) => setEmail(event.target.value)}
             required
             className="mt-1 w-full rounded-md border px-3 py-2"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="password" className="block text-sm font-medium">
             Password
           </label>
           <input
             id="password"
             type="password"
             value={password}
-            onChange={(event) =>
-              setPassword(event.target.value)
-            }
+            onChange={(event) => setPassword(event.target.value)}
             required
             className="mt-1 w-full rounded-md border px-3 py-2"
           />
         </div>
 
-        {error && (
-          <p className="text-sm text-red-600">{error}</p>
-        )}
+        {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
           type="submit"
@@ -102,10 +89,7 @@ function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
-        <Link
-          to="/register"
-          className="text-black underline"
-        >
+        <Link to="/register" className="text-black underline">
           Sign up
         </Link>
       </p>

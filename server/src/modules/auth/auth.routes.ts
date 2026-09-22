@@ -9,14 +9,10 @@ const router = Router();
 router.post(
   "/register",
   validate({ body: registerSchema }),
-  authController.register
+  authController.register,
 );
 
-router.post(
-  "/login",
-  validate({ body: loginSchema }),
-  authController.login
-);
+router.post("/login", validate({ body: loginSchema }), authController.login);
 
 router.post("/logout", authController.logout);
 

@@ -61,7 +61,7 @@ export async function cancel(user: AuthUser, orderId: string) {
       throw new AppError(
         409,
         "ORDER_NOT_CANCELLABLE",
-        "Only pending orders can be cancelled."
+        "Only pending orders can be cancelled.",
       );
     }
 
@@ -104,7 +104,7 @@ export async function create(userId: string, body: CreateOrderInput) {
         throw new AppError(
           404,
           "PRODUCT_NOT_FOUND",
-          "A product in this order could not be found."
+          "A product in this order could not be found.",
         );
       }
 
@@ -123,7 +123,7 @@ export async function create(userId: string, body: CreateOrderInput) {
         throw new AppError(
           409,
           "INSUFFICIENT_STOCK",
-          `Not enough stock available for ${product.name}.`
+          `Not enough stock available for ${product.name}.`,
         );
       }
 

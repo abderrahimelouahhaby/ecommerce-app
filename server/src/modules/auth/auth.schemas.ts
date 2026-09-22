@@ -6,34 +6,25 @@ export const registerSchema = z.object({
     .trim()
     .min(2, "First name must be at least 2 characters"),
 
-  lastName: z
-    .string()
-    .trim()
-    .min(2, "Last name must be at least 2 characters"),
+  lastName: z.string().trim().min(2, "Last name must be at least 2 characters"),
 
   email: z
     .preprocess(
-      (value) =>
-        typeof value === "string" ? value.trim() : value,
-      z.email("Invalid email address")
+      (value) => (typeof value === "string" ? value.trim() : value),
+      z.email("Invalid email address"),
     )
     .transform((email) => email.toLowerCase()),
 
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export const loginSchema = z.object({
   email: z
     .preprocess(
-      (value) =>
-        typeof value === "string" ? value.trim() : value,
-      z.email("Invalid email address")
+      (value) => (typeof value === "string" ? value.trim() : value),
+      z.email("Invalid email address"),
     )
     .transform((email) => email.toLowerCase()),
 
-  password: z
-    .string()
-    .min(1, "Password is required"),
+  password: z.string().min(1, "Password is required"),
 });

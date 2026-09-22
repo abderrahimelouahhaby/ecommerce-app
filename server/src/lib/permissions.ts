@@ -8,5 +8,5 @@ export const isAdmin = (user: AuthUser): boolean => user.role === "ADMIN";
 /** An admin may see any order; a customer only their own. */
 export const canAccessOrder = (
   user: AuthUser,
-  order: { userId: string }
+  order: { userId: string },
 ): boolean => isAdmin(user) || order.userId === user.id;

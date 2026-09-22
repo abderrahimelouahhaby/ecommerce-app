@@ -1,0 +1,12 @@
+node_modules
+dist
+package-lock.json
+.agents
+.claude
+.windsurf
+generated
+migrations
+.env
+.env.*
+*.local
+skills-lock.json

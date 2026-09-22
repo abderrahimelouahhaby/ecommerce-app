@@ -14,7 +14,7 @@ const COOKIE_NAME = "myshop_session";
 export async function authenticate(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const token = req.cookies?.[COOKIE_NAME];
 

@@ -63,7 +63,7 @@ function CartPage() {
           .join(", ");
 
         setError(
-          details || errorBody?.error?.message || "Failed to create order."
+          details || errorBody?.error?.message || "Failed to create order.",
         );
       } else {
         setError("Failed to create order.");
@@ -126,7 +126,9 @@ function CartPage() {
               <div className="mt-3 flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                  onClick={() =>
+                    updateQuantity(item.productId, item.quantity - 1)
+                  }
                   className="rounded border px-3 py-1"
                 >
                   -
@@ -137,7 +139,9 @@ function CartPage() {
                 <button
                   type="button"
                   disabled={item.quantity >= item.stock}
-                  onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                  onClick={() =>
+                    updateQuantity(item.productId, item.quantity + 1)
+                  }
                   className="rounded border px-3 py-1 disabled:opacity-40"
                 >
                   +

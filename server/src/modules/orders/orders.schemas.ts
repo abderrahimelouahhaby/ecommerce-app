@@ -13,7 +13,7 @@ export const createOrderBody = z.object({
       z.object({
         productId: z.uuid(),
         quantity: z.number().int().positive(),
-      })
+      }),
     )
     .min(1, "Order must contain at least one item"),
   shipping: shippingSchema,

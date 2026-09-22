@@ -17,18 +17,14 @@ function ProductCard({ product }: ProductCardProps) {
       )}
 
       <div className="p-4">
-        <h2 className="text-lg font-semibold">
-          {product.name}
-        </h2>
+        <h2 className="text-lg font-semibold">{product.name}</h2>
 
         <p className="mt-2 line-clamp-2 text-sm text-gray-600">
           {product.description}
         </p>
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="font-bold">
-            {formatPrice(product.price)}
-          </span>
+          <span className="font-bold">{formatPrice(product.price)}</span>
           <Link
             to={`/products/${product.id}`}
             className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
