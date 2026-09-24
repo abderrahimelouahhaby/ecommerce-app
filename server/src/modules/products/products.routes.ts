@@ -5,16 +5,12 @@ import { productIdParams, productListQuery } from "./products.schemas.js";
 
 const router = Router();
 
-router.get(
-  "/",
-  validate({ query: productListQuery }),
-  productsController.list
-);
+router.get("/", validate({ query: productListQuery }), productsController.list);
 
 router.get(
   "/:id",
   validate({ params: productIdParams }),
-  productsController.getById
+  productsController.getById,
 );
 
 export default router;

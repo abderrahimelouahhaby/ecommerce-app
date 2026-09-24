@@ -47,8 +47,9 @@ function ProductsPage() {
         if (ignore) return;
 
         if (axios.isAxiosError(err)) {
-          const message = (err.response?.data as { error?: { message?: string } })
-            ?.error?.message;
+          const message = (
+            err.response?.data as { error?: { message?: string } }
+          )?.error?.message;
           setError(message ?? "Failed to load products.");
         } else {
           setError("Failed to load products.");
@@ -106,9 +107,7 @@ function ProductsPage() {
         <>
           {products.length === 0 ? (
             <p>
-              {search
-                ? `No products match "${search}".`
-                : "No products found."}
+              {search ? `No products match "${search}".` : "No products found."}
             </p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

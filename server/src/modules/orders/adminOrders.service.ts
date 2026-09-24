@@ -4,11 +4,7 @@ import { AppError } from "../../utils/AppError.js";
 import { paginate } from "../../utils/pagination.js";
 
 type OrderStatus =
-  | "PENDING"
-  | "CONFIRMED"
-  | "SHIPPED"
-  | "DELIVERED"
-  | "CANCELLED";
+  "PENDING" | "CONFIRMED" | "SHIPPED" | "DELIVERED" | "CANCELLED";
 
 /** Which statuses each status may move to: forward only + PENDING → CANCELLED. */
 const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
@@ -53,7 +49,9 @@ export async function listAdmin(query: AdminOrdersListQuery) {
             {
               user: {
                 OR: [
-                  { firstName: { contains: query.search, mode: "insensitive" } },
+                  {
+                    firstName: { contains: query.search, mode: "insensitive" },
+                  },
                   { lastName: { contains: query.search, mode: "insensitive" } },
                   { email: { contains: query.search, mode: "insensitive" } },
                 ],
@@ -121,7 +119,7 @@ export async function changeStatus(orderId: string, status: OrderStatus) {
       throw new AppError(
         409,
         "INVALID_STATUS_TRANSITION",
-        `Cannot change an order from ${order.status} to ${status}.`
+        `Cannot change an order from ${order.status} to ${status}.`,
       );
     }
 

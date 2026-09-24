@@ -35,7 +35,7 @@ function AdminOrderDetailPage() {
     async function loadOrder() {
       try {
         const response = await api.get<{ data: AdminOrder }>(
-          `/admin/orders/${id}`
+          `/admin/orders/${id}`,
         );
 
         if (ignore) return;
@@ -65,9 +65,7 @@ function AdminOrderDetailPage() {
   const handleAdvance = async (status: string) => {
     if (
       status === "CANCELLED" &&
-      !window.confirm(
-        "Cancel this order? The items will be returned to stock."
-      )
+      !window.confirm("Cancel this order? The items will be returned to stock.")
     ) {
       return;
     }
@@ -78,7 +76,7 @@ function AdminOrderDetailPage() {
     try {
       const response = await api.patch<{ data: AdminOrder }>(
         `/admin/orders/${id}/status`,
-        { status }
+        { status },
       );
       setOrder(response.data.data);
       setNotice(`Order is now ${response.data.data.status}.`);
@@ -138,7 +136,9 @@ function AdminOrderDetailPage() {
         </span>
       </div>
 
-      {notice && <p className="mt-4 rounded-md bg-gray-100 p-3 text-sm">{notice}</p>}
+      {notice && (
+        <p className="mt-4 rounded-md bg-gray-100 p-3 text-sm">{notice}</p>
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="rounded-lg border bg-white p-6">

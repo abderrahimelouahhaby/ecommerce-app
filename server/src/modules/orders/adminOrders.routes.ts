@@ -17,19 +17,19 @@ router.use(authenticate, authorize("ADMIN"));
 router.get(
   "/",
   validate({ query: adminOrdersListQuery }),
-  adminOrdersController.list
+  adminOrdersController.list,
 );
 
 router.get(
   "/:id",
   validate({ params: orderIdParams }),
-  adminOrdersController.getById
+  adminOrdersController.getById,
 );
 
 router.patch(
   "/:id/status",
   validate({ params: orderIdParams, body: orderStatusBody }),
-  adminOrdersController.changeStatus
+  adminOrdersController.changeStatus,
 );
 
 export default router;

@@ -22,7 +22,12 @@ type ListResponse = {
 
 function AdminOrderListPage() {
   const [items, setItems] = useState<AdminOrder[]>([]);
-  const [meta, setMeta] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
+  const [meta, setMeta] = useState({
+    page: 1,
+    limit: 12,
+    total: 0,
+    totalPages: 1,
+  });
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
@@ -53,8 +58,9 @@ function AdminOrderListPage() {
         if (ignore) return;
 
         if (axios.isAxiosError(err)) {
-          const message = (err.response?.data as { error?: { message?: string } })
-            ?.error?.message;
+          const message = (
+            err.response?.data as { error?: { message?: string } }
+          )?.error?.message;
           setError(message ?? "Failed to load orders.");
         } else {
           setError("Failed to load orders.");
@@ -164,8 +170,7 @@ function AdminOrderListPage() {
 
           <div className="mt-6 flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {meta.total} order(s) — page {meta.page} of{" "}
-              {meta.totalPages || 1}
+              {meta.total} order(s) — page {meta.page} of {meta.totalPages || 1}
             </p>
 
             <div className="flex gap-2">

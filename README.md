@@ -7,7 +7,7 @@ A full-stack e-commerce application with a React storefront and an Express + Pri
 **Customers**
 
 - Register and log in — sessions are kept in an **httpOnly JWT cookie** (safe from client-side JS)
-- Browse the active product catalog and view product details
+- Browse the active product catalog with **search, sorting (newest / price), and pagination**, and view product details
 - Add to cart with **stock-aware quantity limits**; cart persists across sessions via localStorage
 - Check out with shipping details — stock is reserved **atomically inside a database transaction**
 - Order history, per-order detail view, and cancel-pending-orders that **restore stock in the same transaction**
@@ -16,6 +16,7 @@ A full-stack e-commerce application with a React storefront and an Express + Pri
 
 - Manage the product catalog: list, create, and edit products
 - Product visibility toggle (`isActive` controls what shoppers can see)
+- Manage orders: paginated list with search + status filter, detail view, and **lifecycle status updates** (confirm, ship, deliver; cancel restores stock)
 - Administrator and role-based access enforced on both routes and queries
 
 **Backend**
@@ -24,6 +25,8 @@ A full-stack e-commerce application with a React storefront and an Express + Pri
 - **Zod-validated** environment config — the server refuses to boot on a missing/malformed env
 - Centralized validation, error handling, and 404 middleware with consistent error envelopes
 - Role-based authorization middleware; customers can only ever see their own orders
+- Shared **search, sort, and pagination** helpers on list endpoints (`meta` envelope with `total` / `totalPages`)
+- Order status transitions validated against a server-side transition map (illegal moves return 409)
 - Seed script that creates an admin account and six sample products
 
 ## 🛠 Tech Stack
@@ -106,20 +109,22 @@ ecommerce-app/
 | `POST` | `/api/auth/login` | Sign in (sets httpOnly cookie) |
 | `POST` | `/api/auth/logout` | Clear session |
 | `GET` | `/api/auth/me` | Current user |
-| `GET` | `/api/products` | Active catalog |
+| `GET` | `/api/products?search&sort&page&limit` | Active catalog (search, sort, paginated) |
 | `GET` | `/api/products/:id` | Product detail |
 | `POST` | `/api/orders` | Place order (transactional stock reservation) |
 | `GET` | `/api/orders` | My orders |
 | `GET` | `/api/orders/:id` | Order detail (ownership enforced) |
 | `DELETE` | `/api/orders/:id` | Cancel pending order (restores stock) |
 | `GET/POST/PUT` | `/api/admin/products*` | Admin product CRUD (auth + role required) |
+| `GET` | `/api/admin/orders` | All orders — search + status filter + pagination |
+| `GET` | `/api/admin/orders/:id` | Order detail with allowed next statuses |
+| `PATCH` | `/api/admin/orders/:id/status` | Advance status lifecycle (cancel restores stock) |
 
 ## 🗺 Roadmap / In Progress
 
 Current focus is the shopping experience; the following are planned:
 
-- [ ] Admin order management (status updates across the lifecycle)
-- [ ] Product search, filtering, and categories
+- [ ] Product categories and advanced filtering
 - [ ] Payment integration
 - [ ] Automated tests (unit + integration)
 - [ ] Deployment configuration and Dockerfiles for both apps
@@ -131,3 +136,4 @@ Current focus is the shopping experience; the following are planned:
 - Roles are **never taken from client input** — new accounts are always `CUSTOMER`
 - Stock decrements use atomic `WHERE stock >= quantity` updates inside transactions
 - Cancelling an order restores stock in the **same transaction** as the status change
+- Admin order status transitions are validated server-side (forward-only, plus `PENDING → CANCELLED`)
