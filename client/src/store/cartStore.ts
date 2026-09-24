@@ -7,7 +7,7 @@ import type { CartItem } from "../types/cart";
 type CartStore = {
   items: CartItem[];
 
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -20,24 +20,27 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
 
-      addToCart: (product) => {
+      addToCart: (product, quantity = 1) => {
         set((state) => {
           const existingItem = state.items.find(
             (item) => item.productId === product.id,
           );
 
           if (existingItem) {
-            if (existingItem.quantity >= product.stock) {
+            // Add as much as stock allows, never over it.
+            const nextQuantity = Math.min(
+              existingItem.quantity + quantity,
+              product.stock,
+            );
+
+            if (nextQuantity === existingItem.quantity) {
               return state;
             }
 
             return {
               items: state.items.map((item) =>
                 item.productId === product.id
-                  ? {
-                      ...item,
-                      quantity: item.quantity + 1,
-                    }
+                  ? { ...item, quantity: nextQuantity }
                   : item,
               ),
             };
@@ -46,6 +49,8 @@ export const useCartStore = create<CartStore>()(
           if (product.stock <= 0) {
             return state;
           }
+
+          const safeQuantity = Math.min(quantity, product.stock);
 
           return {
             items: [
@@ -56,7 +61,7 @@ export const useCartStore = create<CartStore>()(
                 price: product.price,
                 imageUrl: product.imageUrl,
                 stock: product.stock,
-                quantity: 1,
+                quantity: safeQuantity,
               },
             ],
           };

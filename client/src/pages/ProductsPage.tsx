@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Search } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import ProductCardSkeleton from "../components/ProductCardSkeleton";
 import api from "../lib/api";
 import type { Product } from "../types/product";
-import axios from "axios";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 type ListResponse = {
   data: {
@@ -68,83 +79,116 @@ function ProductsPage() {
 
   return (
     <section>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Products</h1>
-
-        <p className="mt-2 text-gray-600">Browse our products.</p>
+      <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Products</h1>
+          <p className="mt-1 text-muted-foreground">
+            Browse our products.
+          </p>
+        </div>
       </div>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row">
-        <input
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setPage(1);
-          }}
-          placeholder="Search by name or description..."
-          className="rounded-md border px-3 py-2 sm:w-72"
-        />
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative sm:w-72">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
+            placeholder="Search by name or description..."
+            className="pl-9"
+          />
+        </div>
 
-        <select
+        <Select
           value={sort}
-          onChange={(event) => {
-            setSort(event.target.value);
+          onValueChange={(value) => {
+            setSort(value);
             setPage(1);
           }}
-          className="rounded-md border px-3 py-2"
         >
-          <option value="newest">Newest</option>
-          <option value="priceLowHigh">Price: Low to High</option>
-          <option value="priceHighLow">Price: High to Low</option>
-        </select>
+          <SelectTrigger className="sm:w-52">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="priceLowHigh">Price: Low to High</SelectItem>
+            <SelectItem value="priceHighLow">Price: High to Low</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p className="mb-4 text-sm text-destructive">{error}</p>}
 
-      {loading ? (
-        <p>Loading products...</p>
-      ) : (
-        <>
-          {products.length === 0 ? (
-            <p>
-              {search ? `No products match "${search}".` : "No products found."}
+      {!error &&
+        (loading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 9 }).map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
+            <Search className="mb-3 size-8 text-muted-foreground" />
+            <p className="font-medium">
+              {search
+                ? `No products match "${search}".`
+                : "No products found."}
             </p>
-          ) : (
+            {search && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+              >
+                Clear search
+              </Button>
+            )}
+          </div>
+        ) : (
+          <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          )}
 
-          <div className="mt-8 flex items-center justify-between">
-            <p className="text-sm text-gray-600">
-              {meta.total} product(s) — page {meta.page} of{" "}
-              {meta.totalPages || 1}
-            </p>
+            <div className="mt-8 flex flex-col items-center justify-between gap-3 sm:flex-row">
+              <p className="text-sm text-muted-foreground">
+                {meta.total} product{meta.total === 1 ? "" : "s"} — page{" "}
+                {meta.page} of {meta.totalPages || 1}
+              </p>
 
-            <div className="flex gap-2">
-              <button
-                type="button"
-                disabled={meta.page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="rounded border px-3 py-1 disabled:opacity-40"
-              >
-                ← Prev
-              </button>
-
-              <button
-                type="button"
-                disabled={meta.page >= meta.totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded border px-3 py-1 disabled:opacity-40"
-              >
-                Next →
-              </button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={meta.page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                >
+                  ← Prev
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={meta.page >= meta.totalPages}
+                  onClick={() => setPage((p) => p + 1)}
+                >
+                  Next →
+                </Button>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        ))}
     </section>
   );
 }
