@@ -7,6 +7,8 @@ import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/NavBar";
+import Footer from "./components/Footer";
+import { Toaster } from "./components/ui/sonner";
 import api from "./lib/api";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
@@ -33,9 +35,9 @@ function App() {
   }, [login]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
@@ -59,6 +61,8 @@ function App() {
           </Route>
         </Routes>
       </main>
+      <Footer />
+      <Toaster />
     </div>
   );
 }
