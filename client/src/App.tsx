@@ -15,6 +15,8 @@ import AdminLayout from "./components/AdminLayout";
 import AdminProductListPage from "./pages/AdminProductListPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import { useAuthStore, type User } from "./store/authStore";
+import AdminOrderListPage from "./pages/AdminOrderListPage";
+import AdminOrderDetailPage from "./pages/AdminOrderDetailPage";
 
 function App() {
   const login = useAuthStore((state) => state.login);
@@ -51,6 +53,8 @@ function App() {
                 path="products/:id/edit"
                 element={<AdminProductFormPage />}
               />
+              <Route path="orders" element={<AdminOrderListPage />} />
+              <Route path="orders/:id" element={<AdminOrderDetailPage />} />
             </Route>
           </Route>
         </Routes>
