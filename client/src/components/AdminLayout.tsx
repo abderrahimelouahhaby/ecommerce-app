@@ -1,32 +1,28 @@
-import { Link, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router";
 
 function AdminLayout() {
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `rounded-md px-3 py-2 text-sm ${
+      isActive ? "bg-black text-white" : "text-gray-600 hover:bg-gray-200"
+    }`;
+
   return (
     <div className="flex gap-8">
       <aside className="w-48 shrink-0 space-y-4">
         <h2 className="text-lg font-bold">Admin</h2>
 
         <nav className="flex flex-col gap-1">
-          <Link
-            to="/admin/products"
-            className="rounded-md bg-black px-3 py-2 text-sm text-white hover:bg-gray-800"
-          >
+          <NavLink to="/admin/products" className={linkClass}>
             Products
-          </Link>
+          </NavLink>
 
-          <Link
-            to="/admin/orders"
-            className="rounded-md px-3 py-2 text-sm text-gray-400"
-          >
+          <NavLink to="/admin/orders" className={linkClass}>
             Orders
-          </Link>
+          </NavLink>
 
-          <Link
-            to="/"
-            className="rounded-md px-3 py-2 text-sm text-gray-600 hover:bg-gray-200"
-          >
+          <NavLink to="/" className={linkClass} end>
             ← Back to shop
-          </Link>
+          </NavLink>
         </nav>
       </aside>
 

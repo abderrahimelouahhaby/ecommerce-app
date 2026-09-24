@@ -9,6 +9,7 @@ import ordersRouter from "./modules/orders/orders.routes.js";
 import { notFound } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import adminProductsRouter from "./modules/products/adminProducts.routes.js";
+import adminOrdersRouter from "./modules/orders/adminOrders.routes.js";
 import { env } from "./config/env.js";
 
 export function createApp() {
@@ -30,6 +31,7 @@ export function createApp() {
 
   app.use("/api/products", productsRouter);
   app.use("/api/admin/products", adminProductsRouter);
+  app.use("/api/admin/orders", adminOrdersRouter);
   app.use("/api/auth", authRouter);
   app.use("/api/users", usersRouter);
   app.use("/api/orders", ordersRouter);

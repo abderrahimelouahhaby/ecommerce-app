@@ -22,3 +22,16 @@ export const createOrderBody = z.object({
 export const orderIdParams = z.object({
   id: z.uuid(),
 });
+
+export const orderStatusBody = z.object({
+  status: z.enum(["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"]),
+});
+
+export const adminOrdersListQuery = z.object({
+  search: z.string().trim().optional(),
+  status: z
+    .enum(["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"])
+    .optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(12),
+});

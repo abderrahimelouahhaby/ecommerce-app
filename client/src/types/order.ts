@@ -23,3 +23,9 @@ export type Order = {
   updatedAt: string;
   items: OrderItem[];
 };
+
+/** The order shape the admin API returns, with the customer + next steps. */
+export type AdminOrder = Order & {
+  user: { id: string; firstName: string; lastName: string; email: string };
+  nextStatuses: string[];
+};
