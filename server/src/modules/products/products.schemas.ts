@@ -28,3 +28,10 @@ export const productCreateBody = z.object({
 export const productUpdateBody = productCreateBody.partial().extend({
   isActive: z.boolean().optional(),
 });
+
+export const productListQuery = z.object({
+  search: z.string().trim().optional(),
+  sort: z.enum(["newest", "priceLowHigh", "priceHighLow"]).optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(12),
+});
