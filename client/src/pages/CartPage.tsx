@@ -85,7 +85,9 @@ function CartPage() {
     return (
       <section className="flex flex-col items-center py-24 text-center">
         <ShoppingCart className="mb-3 size-10 text-muted-foreground" />
-        <h1 className="text-2xl font-bold tracking-tight">Your cart is empty</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Your cart is empty
+        </h1>
         <p className="mt-2 text-muted-foreground">
           Add some products and come back to check out.
         </p>

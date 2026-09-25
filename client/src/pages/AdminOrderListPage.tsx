@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import api from "../lib/api";
 import { formatPrice } from "../lib/formatPrice";
 import type { AdminOrder } from "../types/order";
-
-const statusStyles: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-800",
-  CONFIRMED: "bg-blue-100 text-blue-800",
-  SHIPPED: "bg-purple-100 text-purple-800",
-  DELIVERED: "bg-green-100 text-green-800",
-  CANCELLED: "bg-red-100 text-red-800",
-};
+import OrderStatusBadge from "../components/OrderStatusBadge";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Skeleton } from "../components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 type ListResponse = {
   data: {
@@ -79,122 +91,147 @@ function AdminOrderListPage() {
 
   return (
     <section>
-      <h1 className="text-2xl font-bold">Orders</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <input
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setPage(1);
-          }}
-          placeholder="Search customer name or email..."
-          className="rounded-md border px-3 py-2 sm:w-72"
-        />
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
+            placeholder="Search customer name or email..."
+            className="pl-9 sm:w-72"
+          />
+        </div>
 
-        <select
-          value={status}
-          onChange={(event) => {
-            setStatus(event.target.value);
+        <Select
+          value={status === "" ? "all" : status}
+          onValueChange={(value) => {
+            setStatus(value === "all" ? "" : value);
             setPage(1);
           }}
-          className="rounded-md border px-3 py-2"
         >
-          <option value="">All statuses</option>
-          <option value="PENDING">Pending</option>
-          <option value="CONFIRMED">Confirmed</option>
-          <option value="SHIPPED">Shipped</option>
-          <option value="DELIVERED">Delivered</option>
-          <option value="CANCELLED">Cancelled</option>
-        </select>
+          <SelectTrigger className="sm:w-44">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="PENDING">Pending</SelectItem>
+            <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+            <SelectItem value="SHIPPED">Shipped</SelectItem>
+            <SelectItem value="DELIVERED">Delivered</SelectItem>
+            <SelectItem value="CANCELLED">Cancelled</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
 
-      {loading ? (
-        <p className="mt-6">Loading orders...</p>
-      ) : (
-        <>
-          <div className="mt-6 overflow-x-auto rounded-lg border bg-white">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-gray-50 text-left">
-                  <th className="px-4 py-3">Order</th>
-                  <th className="px-4 py-3">Customer</th>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Total</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((order) => (
-                  <tr key={order.id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <Link
-                        to={`/admin/orders/${order.id}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        #{order.id.slice(0, 8)}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>
-                        <p className="font-medium">{order.fullName}</p>
-                        <p className="text-xs text-gray-500">
-                          {order.user.email}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3">{formatPrice(order.total)}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${
-                          statusStyles[order.status] ?? "bg-gray-100"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div className="mt-6 rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Order</TableHead>
+              <TableHead>Customer</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
 
-          {items.length === 0 && (
-            <p className="mt-6 text-gray-600">No orders found.</p>
-          )}
+          <TableBody>
+            {loading ? (
+              Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton className="h-4 w-20" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-40" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-16" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-20" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : items.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  No orders found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              items.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell>
+                    <Link
+                      to={`/admin/orders/${order.id}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      #{order.id.slice(0, 8)}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium">{order.fullName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {order.user.email}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {formatPrice(order.total)}
+                  </TableCell>
+                  <TableCell>
+                    <OrderStatusBadge status={order.status} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
-          <div className="mt-6 flex items-center justify-between">
-            <p className="text-sm text-gray-600">
-              {meta.total} order(s) — page {meta.page} of {meta.totalPages || 1}
-            </p>
+      <div className="mt-6 flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {meta.total} order(s) — page {meta.page} of {meta.totalPages || 1}
+        </p>
 
-            <div className="flex gap-2">
-              <button
-                type="button"
-                disabled={meta.page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="rounded border px-3 py-1 disabled:opacity-40"
-              >
-                ← Prev
-              </button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={meta.page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            <ChevronLeft /> Prev
+          </Button>
 
-              <button
-                type="button"
-                disabled={meta.page >= meta.totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded border px-3 py-1 disabled:opacity-40"
-              >
-                Next →
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={meta.page >= meta.totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next <ChevronRight />
+          </Button>
+        </div>
+      </div>
     </section>
   );
 }

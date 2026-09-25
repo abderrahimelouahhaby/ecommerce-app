@@ -18,7 +18,9 @@ const STATUS_STYLES: Record<string, string> = {
 
 function OrderStatusBadge({ status }: { status: string }) {
   return (
-    <Badge className={STATUS_STYLES[status] ?? "bg-muted text-muted-foreground"}>
+    <Badge
+      className={STATUS_STYLES[status] ?? "bg-muted text-muted-foreground"}
+    >
       {STATUS_LABELS[status] ?? status}
     </Badge>
   );

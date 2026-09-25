@@ -25,9 +25,7 @@ function AuthCard({ title, subtitle, footer, children }: AuthCardProps) {
         </CardContent>
       </Card>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        {footer}
-      </p>
+      <p className="mt-6 text-center text-sm text-muted-foreground">{footer}</p>
     </section>
   );
 }

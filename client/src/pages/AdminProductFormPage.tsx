@@ -3,6 +3,19 @@ import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import api from "../lib/api";
 import type { Product } from "../types/product";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { Skeleton } from "../components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 function AdminProductFormPage() {
   const { id } = useParams();
@@ -107,125 +120,121 @@ function AdminProductFormPage() {
   };
 
   if (loading) {
-    return <p>Loading product...</p>;
+    return (
+      <div className="mt-6 max-w-xl space-y-4">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
   }
 
   return (
     <section className="max-w-xl">
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-3xl font-bold tracking-tight">
         {isEditing ? "Edit product" : "New product"}
       </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="mt-6 space-y-4 rounded-lg border bg-white p-6"
-      >
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium">
-            Name
-          </label>
-          <input
-            id="name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
-            className="mt-1 w-full rounded-md border px-3 py-2"
-          />
-        </div>
+      <Card className="mt-6">
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium">
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            required
-            rows={4}
-            className="mt-1 w-full rounded-md border px-3 py-2"
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                required
+                rows={4}
+              />
+            </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label htmlFor="price" className="block text-sm font-medium">
-              Price
-            </label>
-            <input
-              id="price"
-              type="number"
-              step="0.01"
-              min="0"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-              required
-              className="mt-1 w-full rounded-md border px-3 py-2"
-            />
-          </div>
+            <div className="grid gap-5 sm:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="stock" className="block text-sm font-medium">
-              Stock
-            </label>
-            <input
-              id="stock"
-              type="number"
-              step="1"
-              min="0"
-              value={stock}
-              onChange={(event) => setStock(event.target.value)}
-              className="mt-1 w-full rounded-md border px-3 py-2"
-            />
-          </div>
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  step="1"
+                  min="0"
+                  value={stock}
+                  onChange={(event) => setStock(event.target.value)}
+                />
+              </div>
 
-          <div>
-            <label htmlFor="isActive" className="block text-sm font-medium">
-              Active
-            </label>
-            <input
-              id="isActive"
-              type="checkbox"
-              checked={isActive}
-              onChange={(event) => setIsActive(event.target.checked)}
-              className="mt-3 h-5 w-5"
-            />
-          </div>
-        </div>
+              <div className="space-y-2">
+                <Label>Active</Label>
+                <Select
+                  value={String(isActive)}
+                  onValueChange={(value) => setIsActive(value === "true")}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Active</SelectItem>
+                    <SelectItem value="false">Hidden</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-        <div>
-          <label htmlFor="imageUrl" className="block text-sm font-medium">
-            Image URL
-          </label>
-          <input
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(event) => setImageUrl(event.target.value)}
-            placeholder="https://..."
-            className="mt-1 w-full rounded-md border px-3 py-2"
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">Image URL</Label>
+              <Input
+                id="imageUrl"
+                value={imageUrl}
+                onChange={(event) => setImageUrl(event.target.value)}
+                placeholder="https://..."
+              />
+            </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && (
+              <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {error}
+              </p>
+            )}
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded-md bg-black px-6 py-2 text-sm text-white hover:bg-gray-800 disabled:opacity-50"
-          >
-            {submitting ? "Saving..." : "Save product"}
-          </button>
+            <div className="flex gap-3">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Saving..." : "Save product"}
+              </Button>
 
-          <button
-            type="button"
-            onClick={() => navigate("/admin/products")}
-            className="rounded-md border px-6 py-2 text-sm"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate("/admin/products")}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </section>
   );
 }

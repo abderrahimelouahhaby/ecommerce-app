@@ -112,7 +112,12 @@ function LoginPage() {
           </p>
         )}
 
-        <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={submitting}
+        >
           {submitting ? "Signing in..." : "Login"}
         </Button>
       </form>

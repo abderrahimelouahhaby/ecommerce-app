@@ -153,7 +153,11 @@ function OrderDetailPage() {
                         : "border border-border text-muted-foreground"
                   }`}
                 >
-                  {index < currentStep ? <Check className="size-4" /> : index + 1}
+                  {index < currentStep ? (
+                    <Check className="size-4" />
+                  ) : (
+                    index + 1
+                  )}
                 </div>
                 <span
                   className={`text-xs ${
