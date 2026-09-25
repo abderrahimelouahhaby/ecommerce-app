@@ -57,7 +57,9 @@ function ProductCard({ product }: ProductCardProps) {
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-2">
-          <span className="text-lg font-bold">{formatPrice(product.price)}</span>
+          <span className="text-lg font-bold">
+            {formatPrice(product.price)}
+          </span>
 
           <Button
             type="button"

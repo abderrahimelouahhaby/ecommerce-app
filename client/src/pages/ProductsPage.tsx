@@ -82,9 +82,7 @@ function ProductsPage() {
       <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Products</h1>
-          <p className="mt-1 text-muted-foreground">
-            Browse our products.
-          </p>
+          <p className="mt-1 text-muted-foreground">Browse our products.</p>
         </div>
       </div>
 
@@ -133,9 +131,7 @@ function ProductsPage() {
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
             <Search className="mb-3 size-8 text-muted-foreground" />
             <p className="font-medium">
-              {search
-                ? `No products match "${search}".`
-                : "No products found."}
+              {search ? `No products match "${search}".` : "No products found."}
             </p>
             {search && (
               <Button
