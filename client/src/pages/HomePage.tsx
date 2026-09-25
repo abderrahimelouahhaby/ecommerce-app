@@ -74,7 +74,7 @@ function HomePage() {
   return (
     <div className="flex flex-col gap-16">
       {/* Hero */}
-      <section className="rounded-2xl border bg-gradient-to-b from-muted/60 to-background px-6 py-16 text-center sm:py-20">
+      <section className="rounded-2xl border bg-linear-to-b from-muted/60 to-background px-6 py-16 text-center sm:py-20">
         <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
           A starter storefront
         </p>

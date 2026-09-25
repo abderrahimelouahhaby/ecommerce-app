@@ -1,6 +1,6 @@
 # MyShop
 
-A full-stack e-commerce application with a React storefront and an Express + Prisma API. Customers can browse products, manage a persistent cart, place orders with shipping details, and track or cancel them. Admins get a protected dashboard to manage the product catalog.
+A full-stack e-commerce application with a React storefront and an Express + Prisma API. Customers can browse products, manage a persistent cart, place orders with shipping details, and track or cancel them. Admins get a protected dashboard to manage the product catalog and order lifecycle.
 
 ## ✨ Features
 
@@ -29,12 +29,20 @@ A full-stack e-commerce application with a React storefront and an Express + Pri
 - Order status transitions validated against a server-side transition map (illegal moves return 409)
 - Seed script that creates an admin account and six sample products
 
+**UI / UX**
+
+- Storefront and admin built on **shadcn/ui** (in-repo, Radix-based components) with a neutral, minimal design
+- Every destructive action (cancel order, delete product) goes through an accessible **confirmation dialog** — no browser `confirm()` prompts
+- Loading **skeletons**, empty states, **Sonner toasts**, and an order status **timeline stepper**
+- Mobile-friendly: collapsible navigation, responsive grids, keyboard- and `Esc`-friendly overlays
+
 ## 🛠 Tech Stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | React 19 · TypeScript · Vite 8 · Tailwind CSS 4 · React Router 8 |
-| State | Zustand (persisted cart) + Axios API client |
+| UI | shadcn/ui (Radix UI primitives) · lucide-react icons · Sonner toasts |
+| State | Zustand (auth, persisted cart) + Axios API client |
 | Backend | Node.js · Express 5 · TypeScript · Zod 4 |
 | Database | PostgreSQL 17 via Prisma 7 (transactions, atomic stock updates) |
 | Auth | JWT in httpOnly cookies · bcrypt (12 rounds) · constant-time login |
@@ -44,19 +52,19 @@ A full-stack e-commerce application with a React storefront and an Express + Pri
 
 ```
 ecommerce-app/
-├── client/            # React storefront (Vite)
+├── client/              # React storefront (Vite)
 │   └── src/
-│       ├── pages/     # Storefront + admin pages
-│       ├── components/
-│       ├── store/     # Zustand stores (auth, cart)
-│       └── lib/       # Axios client, formatting utils
-├── server/            # Express API (Prisma)
-│   └── src/
-│       ├── modules/   # auth / users / products / orders
-│       ├── middleware/ # auth, roles, validation, errors
-│       └── config/    # Zod-validated environment
-├── prisma/            # Schema, migrations, seed
-└── docker-compose.yml # Local PostgreSQL 17
+│       ├── pages/       # Storefront + admin pages
+│       ├── components/  # App components; shadcn/ui primitives in ui/
+│       ├── store/       # Zustand stores (auth, cart)
+│       └── lib/         # Axios client, formatting utils
+├── server/              # Express API (Prisma)
+│   ├── src/
+│   │   ├── modules/     # auth / users / products / orders
+│   │   ├── middleware/  # auth, roles, validation, errors
+│   │   └── config/      # Zod-validated environment
+│   └── prisma/          # Schema, migrations, seed
+└── docker-compose.yml   # Local PostgreSQL 17
 ```
 
 ## 🚀 Getting Started
@@ -114,15 +122,15 @@ ecommerce-app/
 | `POST` | `/api/orders` | Place order (transactional stock reservation) |
 | `GET` | `/api/orders` | My orders |
 | `GET` | `/api/orders/:id` | Order detail (ownership enforced) |
-| `DELETE` | `/api/orders/:id` | Cancel pending order (restores stock) |
-| `GET/POST/PUT` | `/api/admin/products*` | Admin product CRUD (auth + role required) |
+| `POST` | `/api/orders/:id/cancel` | Cancel pending order (restores stock) |
+| `GET/POST/PATCH/DELETE` | `/api/admin/products*` | Admin product CRUD (auth + role required) |
 | `GET` | `/api/admin/orders` | All orders — search + status filter + pagination |
 | `GET` | `/api/admin/orders/:id` | Order detail with allowed next statuses |
 | `PATCH` | `/api/admin/orders/:id/status` | Advance status lifecycle (cancel restores stock) |
 
 ## 🗺 Roadmap / In Progress
 
-Current focus is the shopping experience; the following are planned:
+The storefront and admin UI have been redesigned on shadcn/ui; remaining planned work:
 
 - [ ] Product categories and advanced filtering
 - [ ] Payment integration
